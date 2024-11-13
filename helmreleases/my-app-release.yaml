@@ -1,0 +1,26 @@
+# helmreleases/my-app-helmrelease.yaml
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: my-app
+  namespace: default
+spec:
+  chart:
+    spec:
+      chart: ./charts/my-app
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: my-helm-repo
+        namespace: flux-system
+  interval: 5m
+  releaseName: my-app-release
+  targetNamespace: default
+  values:
+    replicaCount: 2
+    image:
+      repository: myregistry.azurecr.io/my-app
+      tag: "1.0.0"
+    service:
+      type: ClusterIP
+      port: 80
